@@ -1,0 +1,39 @@
+use loja;
+
+CREATE TABLE Cliente 
+( 
+ cod_Cliente INT PRIMARY KEY AUTO_INCREMENT,  
+ nome VARCHAR(120) NOT NULL,  
+ telefone VARCHAR(50) NOT NULL,  
+ email VARCHAR(120),  
+ UNIQUE (email)
+); 
+
+CREATE TABLE Produto 
+( 
+ cod_Produto INT PRIMARY KEY AUTO_INCREMENT,  
+ nome VARCHAR(100) NOT NULL,  
+ preco FLOAT NOT NULL,  
+ estoque INT NOT NULL 
+); 
+
+CREATE TABLE Venda 
+( 
+ cod_venda INT PRIMARY KEY AUTO_INCREMENT,  
+ cod_cliente INT,  
+ data DATE NOT NULL  
+); 
+
+CREATE TABLE Itens_Venda 
+( 
+ cod_itens_vendas INT PRIMARY KEY AUTO_INCREMENT,  
+ cod_produto INT,  
+ quantidade INT NOT NULL,  
+ valor FLOAT NOT NULL  
+); 
+
+ALTER TABLE Venda ADD FOREIGN KEY(cod_cliente) REFERENCES undefined (cod_cliente);
+ALTER TABLE Itens_Venda ADD FOREIGN KEY(cod_produto) REFERENCES undefined (cod_produto)
+
+SELECT * FROM loja.venda
+inner join cliente on (cli_codigo = ven_FK_cliente)
