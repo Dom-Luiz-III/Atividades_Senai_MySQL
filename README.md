@@ -4,4 +4,5 @@ Nas aulas de Banco de Dados, aprendemos sobre os conceitos e as ferramentas para
 Matéria desenvolvida no Curso Técnico de Análise e Desenvolvimento de Sistemas (ADS) pelo SENAI.
 
 ---
+
 Para execução dos códigos disponivéis é necessário a intalação do MySQL junto com seu Workbench.
