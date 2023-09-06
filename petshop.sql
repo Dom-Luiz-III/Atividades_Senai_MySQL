@@ -73,37 +73,32 @@ create table racas (
 );
 
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Inserção de clientes
+-- Inserção de dados:
+
 INSERT INTO cliente (cli_nome, cli_email, cli_telefone)
 VALUES ('João Silva', 'joao.silva@example.com', '1234567890'),
        ('Maria Santos', 'maria.santos@example.com', '9876543210');
 
--- Inserção de animais
 INSERT INTO animais (ani_nome, ani_pet, ani_cliente_id)
 VALUES ('Rex', 'Cachorro', 1),
        ('Mel', 'Gato', 2);
 
--- Inserção de vacinas
 INSERT INTO vacina (vaci_nome)
 VALUES ('Vacina Pfizer'),
        ('Vacina Zeneca');
 
--- Inserção de vacinas aplicadas
 INSERT INTO vacina_aplicada (vaci_apli_nome, vaci_apli_animal_id)
 VALUES ('Aplicada', 1),
        ('Não Aplicada', 2);
 
--- Inserção de ordens de serviço
 INSERT INTO ordem_de_servico (ordem_serv_nome, ordem_serv_data, ordem_serv_cliente_id)
 VALUES ('Ordem de Serviço 1', '2023-09-01', 1),
        ('Ordem de Serviço 2', '2023-09-02', 2);
 
--- Inserção de itens de ordens de serviço
 INSERT INTO ordem_de_servico_itens (ordem_serv_item_nome, ordem_serv_item_ordem_id, ordem_serv_item_produto_id)
 VALUES ('Item 1 - Ordem 1', 1, 1),
        ('Item 2 - Ordem 2', 2, 2);
 
--- Inserção de produtos/serviços
 INSERT INTO produto_servico (prod_nome, prod_data_validade)
 VALUES ('Produto 1', '2023-10-01'),
        ('Produto 2', '2023-10-15');
