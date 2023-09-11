@@ -1,9 +1,6 @@
 create database petshop;
 use petshop;
 
--- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Create table:
-
 create table cliente (
 	cli_id int primary key auto_increment,
 	cli_nome varchar(100),
@@ -75,6 +72,20 @@ create table racas (
 	raca_nome varchar(100)
 );
 
+create table estoque (
+	estoq_id int primary key auto_increment,
+    estoq_estoque float,
+	estoq_fk_prod_serv int,
+    foreign key (estoq_fk_prod_serv) references produto_servico(prod_id)
+);
+
+create table lucros (
+	lucros_id int primary key auto_increment,
+    lucros_lucro float,
+	lucros_fk_prod_serv int,
+    foreign key (lucros_fk_prod_serv) references produto_servico(prod_id)
+);
+
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Inserção de dados:
 
@@ -109,7 +120,7 @@ VALUES ('Produto Pedigree', '2023-10-01'),
 INSERT INTO racas (raca_nome)
 VALUES ('Vira Lata'),
        ('Pit Bull');
-
+       
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Atividades
 
@@ -191,4 +202,20 @@ from recebimento;
 create view vw_racas as
 select raca_nome
 from racas;
+
+create view vw_estoque as
+select estoq_estoque,estoq_fk_prod_serv
+from estoque;
+
+create view vw_lucros as
+select lucros_lucro,lucros_fk_prod_serv
+from lucros;
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Outros
+
+-- Alter Table:
+alter table produto_servico add column custo float;
+
+-- Insert into diferenciado:
+insert into estoque (estoq_fk_prod_serv, estoq_estoque)
+select prod_id, 0 from produto_servico
