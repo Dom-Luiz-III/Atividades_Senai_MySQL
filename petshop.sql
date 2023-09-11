@@ -11,7 +11,7 @@ create table cliente (
 create table animais (
 	ani_id int primary key auto_increment,
 	ani_nome varchar(100),
-	ani_pet varchar(100),
+    ani_sexo varchar(20),
 	ani_cliente_id int,
 	foreign key (ani_cliente_id) references cliente(cli_id)
 );
@@ -79,9 +79,9 @@ INSERT INTO cliente (cli_nome, cli_email, cli_telefone)
 VALUES ('João Silva', 'joao.silva@example.com', '1234567890'),
        ('Maria Santos', 'maria.santos@example.com', '9876543210');
 
-INSERT INTO animais (ani_nome, ani_pet, ani_cliente_id)
-VALUES ('Rex', 'Cachorro', 1),
-       ('Mel', 'Gato', 2);
+INSERT INTO animais (ani_nome, ani_sexo, ani_cliente_id)
+VALUES ('Rex', 'Macho', 1),
+       ('Mel', 'Fêmea', 2);
 
 INSERT INTO vacina (vaci_nome)
 VALUES ('Vacina Pfizer'),
@@ -100,10 +100,15 @@ VALUES ('Item 1 - Ordem 1', 1, 1),
        ('Item 2 - Ordem 2', 2, 2);
 
 INSERT INTO produto_servico (prod_nome, prod_data_validade)
-VALUES ('Produto 1', '2023-10-01'),
-       ('Produto 2', '2023-10-15');
+VALUES ('Produto Pedigree', '2023-10-01'),
+       ('Produto Whiskas', '2023-10-15');
+       
+INSERT INTO racas (raca_nome)
+VALUES ('Vira Lata'),
+       ('Pit Bull');
 
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Atividades
 
 -- Liste os animais que fizeram serviço no pet.
 SELECT a.ani_id, a.ani_nome, a.ani_pet
@@ -141,4 +146,46 @@ WHERE ani_id = 1;
 UPDATE cliente
 SET cli_total_comprado = cli_total_comprado + 100
 WHERE cli_id = 1;
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Create Views:
+
+create view vw_clientes as
+select cli_nome, cli_email, cli_telefone
+from cliente;
+
+create view vw_animals as
+select ani_nome, ani_sexo, ani_cliente_id
+from animais;
+
+create view vw_vacinas as
+select vaci_nome
+from vacina;
+
+create view vw_vacinas_aplicadas as
+select vaci_apli_nome,vaci_apli_animal_id
+from vacina_aplicada;
+
+create view vw_ordem_de_servico as
+select ordem_serv_item_nome,ordem_serv_data,ordem_serv_cliente_id
+from ordem_de_servico;
+
+create view vw_produto_servico as
+select prod_nome,prod_data_validade
+from produto_servico;
+
+create view vw_forma_pagamento as
+select paga_nome
+from forma_pagamento;
+
+create view vw_funcionarios as
+select func_nome
+from funcionarios;
+
+create view vw_recebimento as
+select receb_nome
+from recebimento;
+
+create view vw_racas as
+select raca_nome
+from racas;
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
