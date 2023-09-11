@@ -1,6 +1,9 @@
 create database petshop;
 use petshop;
 
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Create table:
+
 create table cliente (
 	cli_id int primary key auto_increment,
 	cli_nome varchar(100),
