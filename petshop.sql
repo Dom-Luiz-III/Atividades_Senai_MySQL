@@ -211,6 +211,21 @@ create view vw_lucros as
 select lucros_lucro,lucros_fk_prod_serv
 from lucros;
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Create trigger
+
+create trigger Tgr_ItensVenda_Insert_BaixaEstoque after insert
+on Item_Ordem
+for each row
+update estoque set estoque = estoque - new.itm_qtd
+where estoq_id = new.Item_Ordem.produto_servico_id;
+
+create trigger Tgr_ItensVenda_Delete_Volta_estoque after delete
+on Item_Ordem
+for each row
+update produto_servico set prod_serv_estoque = prod_serv_estoque + old.itm_qtd
+where prod_serv_id = old.Item_Ordem.produto_servico_id;
+
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Outros
 
 -- Alter Table:
@@ -218,4 +233,4 @@ alter table produto_servico add column custo float;
 
 -- Insert into diferenciado:
 insert into estoque (estoq_fk_prod_serv, estoq_estoque)
-select prod_id, 0 from produto_servico
+select prod_id, 0 from produto_servico;
