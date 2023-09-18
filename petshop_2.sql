@@ -14,9 +14,7 @@ c_id int primary key auto_increment,
 c_nome varchar(100),
 c_fd int,
 c_total_comprado FLOAT,
-
 CONSTRAINT fk_c_fd FOREIGN KEY (c_fd) REFERENCES Forma_de_Pagamento(fd_forma_id)
-
 );
 
 
@@ -38,7 +36,6 @@ CREATE TABLE Vacinas (
     v_descricao TEXT,
     v_validade DATE,
     v_preço int
-   
 );
 
 CREATE TABLE Funcionarios (
@@ -113,22 +110,17 @@ CREATE TABLE Recebimento (
 
 
 create table Estoque(
-
 e_id int Primary key auto_increment,
 e_produto_serviço_id int,
 e_estoque float,
 CONSTRAINT e_fk_produto_serviço_id FOREIGN KEY (e_produto_serviço_id) REFERENCES Produto_Servico(ps_produto_servico_id)
- 
 );
 
 create table Lucro(
-
 l_id int Primary key auto_increment,
 l_produto_serviço_id int,
 l_lucro float,
 CONSTRAINT l_fk_produto_serviço_id  FOREIGN KEY (l_produto_serviço_id) REFERENCES Produto_Servico(ps_produto_servico_id)
-
-
 );
 
 CREATE TABLE Agendamento (
@@ -190,7 +182,7 @@ GROUP BY a.a_animal_id
 ORDER BY valor_total DESC
 LIMIT 10;
 
-CREATE VIEW Logs AS
+CREATE VIEW Logs_usuario AS
 SELECT lg.lg_id, lg.lg_data_hora, lg.lg_usuario, lg.lg_acao, lg.lg_detalhes
 FROM Logs lg;
 
@@ -235,29 +227,130 @@ WHERE e_produto_serviço_id = OLD.ido_produto_servico_id;
 
 -- Create Tiggers solicitados na atividade:
 
-
-CREATE TRIGGER Tgr_Animal_Historico AFTER INSERT ON Itens_da_ordem_de_servico
+DELIMITER //
+CREATE TRIGGER Tgr_Log_Interacoes
+AFTER INSERT ON Produto_Servico
 FOR EACH ROW
 BEGIN
-    INSERT INTO Animal_historico (ah_animal_id, ah_data_evento, ah_descricao)
-    VALUES (NEW.ido_animal_id, NOW(), 'Serviço realizado: ', NEW.ido_produto_servico_id);
-END;
-
-CREATE TRIGGER Tgr_Agendamento_Animal AFTER INSERT ON Animais
-FOR EACH ROW
-BEGIN
-    INSERT INTO Agendamento (agn_data_agendamento, agn_funcionario_id, agn_animal_id)
-    VALUES (NOW(), CURRENT_USER(), NEW.a_animal_id);
-END;
-
-CREATE TRIGGER Tgr_Log_Insert_Update_Delete AFTER INSERT, UPDATE, DELETE
-FOR EACH ROW
-ON Produto_Servico, Ordem_de_servico, Vacinas_aplicadas
-BEGIN
-
     INSERT INTO Logs (lg_data_hora, lg_usuario, lg_acao, lg_detalhes)
-    VALUES (NOW(), CURRENT_USER(), EVENT_TYPE(), CONCAT('ID: ', NEW.ps_produto_servico_id));
-END;;
+    VALUES (NOW(), 'NomeDoUsuario', 'INSERT', 'Novo registro inserido na tabela Produto-Serviço');
+END;
+//
+DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER Tgr_Log_Interacoes
+AFTER UPDATE ON Produto_Servico
+FOR EACH ROW
+BEGIN
+    INSERT INTO Logs (lg_data_hora, lg_usuario, lg_acao, lg_detalhes)
+    VALUES (NOW(), 'NomeDoUsuario', 'UPDATE', 'Registro atualizado na tabela Produto-Serviço');
+END;
+//
+DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER Tgr_Log_Interacoes
+AFTER DELETE ON Produto_Servico
+FOR EACH ROW
+BEGIN
+    INSERT INTO Logs (lg_data_hora, lg_usuario, lg_acao, lg_detalhes)
+    VALUES (NOW(), 'NomeDoUsuario', 'DELETE', 'Registro excluído da tabela Produto-Serviço');
+END;
+//
+DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER Tgr_Inserir_Animal_Historico_Aplicacao_Vacina
+AFTER INSERT ON Vacinas_Aplicadas
+FOR EACH ROW
+BEGIN
+    INSERT INTO Animal_Historico (ah_animal_id, ah_data_evento, ah_descricao)
+    VALUES (NEW.va_animal_id, NEW.va_data_aplicacao, 'Aplicação de Vacina');
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER Tgr_Inserir_Animal_Historico_Ordem_de_Servico
+AFTER INSERT ON Itens_da_Ordem_de_Servico
+FOR EACH ROW
+BEGIN
+    INSERT INTO Animal_Historico (ah_animal_id, ah_data_evento, ah_descricao)
+    VALUES (NEW.ido_animal_id, NOW(), 'Ordem de Serviço Criada');
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER Tgr_Inserir_Agendamento_Novo_Animal
+AFTER INSERT ON Animais
+FOR EACH ROW
+BEGIN
+    INSERT INTO Agendamento (agn_data_agendamento, agn_hora_agendamento, agn_animal_id, agn_funcionario_id)
+    VALUES (NOW(), NOW(), NEW.a_animal_id, 'IDDoFuncionarioResponsavel');
+END;
+//
+DELIMITER ;
+
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- INSERT INTO
+
+INSERT INTO Racas (r_nome) VALUES
+    ('Poodle'),
+    ('Labrador'),
+    ('Siamese'),
+    ('Persian');
+
+INSERT INTO Clientes (c_nome, c_fd, c_total_comprado) VALUES
+    ('João', 1, 500.00),
+    ('Maria', 2, 750.00),
+    ('Carlos', 3, 300.00);
+
+INSERT INTO Animais (a_nome, a_cliente_id, a_rid, q_quantidade_de_banhos) VALUES
+    ('Bobby', 1, 1, 3),
+    ('Luna', 2, 2, 2),
+    ('Whiskers', 3, 3, 1);
+
+INSERT INTO Vacinas (v_nome, v_descricao, v_validade, v_preço) VALUES
+    ('Vacina1', 'Descrição da Vacina 1', '2023-12-31', 50),
+    ('Vacina2', 'Descrição da Vacina 2', '2023-12-31', 60),
+    ('Vacina3', 'Descrição da Vacina 3', '2023-12-31', 40);
+
+INSERT INTO Funcionarios (f_nome, f_cargo, f_salario, f_comissao) VALUES
+    ('Ana', 'Atendente', 2000.00, 0.10),
+    ('Carlos', 'Veterinário', 3000.00, 0.15),
+    ('Mariana', 'Groomer', 1800.00, 0.12);
+
+INSERT INTO Forma_de_pagamento (fd_nome) VALUES
+    ('Cartão de Crédito'),
+    ('Dinheiro'),
+    ('Cheque');
+
+INSERT INTO Produto_Servico (ps_nome, ps_descricao, ps_preco, ps_serv_estoque) VALUES
+    ('Banho', 'Banho completo para cães', 40.00, 50),
+    ('Corte de Cabelo', 'Corte de cabelo para cães e gatos', 30.00, 30),
+    ('Vacinação', 'Vacinação completa', 60.00, 20);
+
+INSERT INTO Itens_da_ordem_de_servico (ido_ordem_id, ido_produto_servico_id, ido_quantidade, ido_valor_unitario) VALUES
+    (1, 1, 1, 40.00),
+    (1, 2, 1, 30.00),
+    (2, 1, 1, 40.00);
+
+INSERT INTO Vacinas_aplicadas (va_animal_id, va_vacina_id, va_data_aplicacao, va_proxima_dose) VALUES
+    (1, 1, '2023-09-15', '2024-03-15'),
+    (2, 2, '2023-09-10', '2024-03-10');
+
+INSERT INTO Estoque (e_produto_serviço_id, e_estoque) VALUES
+    (1, 50),
+    (2, 30),
+    (3, 20);
+
+INSERT INTO Lucro (l_produto_serviço_id, l_lucro) VALUES
+    (1, 10.00),
+    (2, 8.00),
+    (3, 15.00);
+
+INSERT INTO Agendamento (agn_data_agendamento, agn_hora_agendamento, agn_animal_id, agn_funcionario_id) VALUES
+    ('2023-09-20', '09:00:00', 1, 2),
+    ('2023-09-25', '15:30:00', 2, 3);
