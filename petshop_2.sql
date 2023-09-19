@@ -299,8 +299,8 @@ DELIMITER ;
 INSERT INTO Racas (r_nome) VALUES
     ('Poodle'),
     ('Labrador'),
-    ('Siamese'),
-    ('Persian');
+    ('Siamês'),
+    ('Persa');
 
 INSERT INTO Clientes (c_nome, c_fd, c_total_comprado) VALUES
     ('João', 1, 500.00),
@@ -313,23 +313,23 @@ INSERT INTO Animais (a_nome, a_cliente_id, a_rid, q_quantidade_de_banhos) VALUES
     ('Whiskers', 3, 3, 1);
 
 INSERT INTO Vacinas (v_nome, v_descricao, v_validade, v_preço) VALUES
-    ('Vacina1', 'Descrição da Vacina 1', '2023-12-31', 50),
-    ('Vacina2', 'Descrição da Vacina 2', '2023-12-31', 60),
-    ('Vacina3', 'Descrição da Vacina 3', '2023-12-31', 40);
+    ('Vacina Raiva', 'Vacina para pets que pegaram raiva', '2023-12-31', 50),
+    ('Vacina Hormonal', 'Vacina para pets do gênero feminino para não engravidar', '2023-12-31', 60),
+    ('Vacina Febre', 'Vacina para pets com doenças relacionada a febre', '2023-12-31', 40);
 
 INSERT INTO Funcionarios (f_nome, f_cargo, f_salario, f_comissao) VALUES
     ('Ana', 'Atendente', 2000.00, 0.10),
     ('Carlos', 'Veterinário', 3000.00, 0.15),
-    ('Mariana', 'Groomer', 1800.00, 0.12);
+    ('Mariana', 'Faxineira', 1800.00, 0.12);
 
 INSERT INTO Forma_de_pagamento (fd_nome) VALUES
     ('Cartão de Crédito'),
-    ('Dinheiro'),
-    ('Cheque');
+    ('Dinheiro Físico'),
+    ('Pix');
 
 INSERT INTO Produto_Servico (ps_nome, ps_descricao, ps_preco, ps_serv_estoque) VALUES
     ('Banho', 'Banho completo para cães', 40.00, 50),
-    ('Corte de Cabelo', 'Corte de cabelo para cães e gatos', 30.00, 30),
+    ('Tosa', 'Tosa para cães e gatos', 30.00, 30),
     ('Vacinação', 'Vacinação completa', 60.00, 20);
 
 INSERT INTO Itens_da_ordem_de_servico (ido_ordem_id, ido_produto_servico_id, ido_quantidade, ido_valor_unitario) VALUES
