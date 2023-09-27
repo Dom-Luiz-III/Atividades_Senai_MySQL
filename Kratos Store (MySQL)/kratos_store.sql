@@ -1,4 +1,10 @@
--- Criação do Banco de Dados
+/*
+SENAI
+Atividade Teórica e Pratica
+Aluno: Luiz Henrique Carneiro Carvalho
+Data: 25/09/2023
+*/
+
 CREATE DATABASE kratos_store;
 USE kratos_store;
 
